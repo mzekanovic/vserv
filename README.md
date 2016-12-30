@@ -1,6 +1,6 @@
 # Installation
 
-## Install latest Golang
+Install latest Golang
 
 ## go-bindata
 
