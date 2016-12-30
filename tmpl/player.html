@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" autoplay>
+    <title>{{ .src }} / Vserv</title>
+</head>
+<body>
+
+<style>
+    body {
+        background-color: #2b2b2b;
+        color: #f6f6f6;
+    }
+    video {
+        min-width: 600px;
+    }
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .btn {
+        -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+        box-shadow:inset 0px 1px 0px 0px #ffffff;
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffffff), color-stop(1, #f6f6f6));
+        background:-moz-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+        background:-webkit-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+        background:-o-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+        background:-ms-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+        background:linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0);
+        background-color:#ffffff;
+        -moz-border-radius:6px;
+        -webkit-border-radius:6px;
+        border-radius:6px;
+        border:1px solid #dcdcdc;
+        display:inline-block;
+        cursor:pointer;
+        color:#666666;
+        font-family:Arial;
+        font-size:15px;
+        font-weight:bold;
+        padding:6px 24px;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #ffffff;
+    }
+    .btn:hover {
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));
+        background:-moz-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+        background:-webkit-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+        background:-o-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+        background:-ms-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+        background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#ffffff',GradientType=0);
+        background-color:#f6f6f6;
+    }
+    .btn:active {
+        position:relative;
+        top:1px;
+    }
+
+</style>
+<div class="wrapper">
+    <h1>{{ .src }}</h1>
+    <video id="player" controls>
+        <source src="{{ .src }}" type="{{ .mimetype }}"></source>
+        Your browser does not suport the video tag.
+    </video>
+    <br>
+    <div class="buttons">
+        <button data-rate="1.0" class="btn">1.0x</button>
+        <button data-rate="1.25" class="btn">1.25x</button>
+        <button data-rate="1.5" class="btn">1.5x</button>
+        <button data-rate="1.75" class="btn">1.75x</button>
+        <button data-rate="2.0" class="btn">2.0x</button>
+    </div>
+</div>
+<script>
+(function() {
+    var player = document.getElementById('player'),
+        btns = document.getElementsByClassName('btn');
+
+    function onBtnClick(e) {
+        player.playbackRate = parseFloat(e.target.getAttribute('data-rate'));
+    }
+
+    function onKeyDown(e) {
+        var LEFT = 37, UP = 38, RIGHT = 39, DOWN = 40, SPACE = 32;
+
+        if (e.keyCode === LEFT) {
+            skip(-5);
+        }
+        else if (e.keyCode === UP) {
+            skip(30);
+        }
+        else if (e.keyCode === RIGHT) {
+            skip(5);
+        }
+        else if (e.keyCode === DOWN) {
+            skip(-30);
+        }
+        else if (e.keyCode === SPACE) {
+            pausePlayVideo();
+        }
+    }
+
+    function onClick() {
+        pausePlayVideo();
+    }
+
+    function pausePlayVideo() {
+        if (player.readyState > 2) {
+            if (player.currentTime > 0
+                && !player.paused
+                && !player.ended
+                ) {
+                player.pause()
+            }
+            else {
+                player.play()
+            }
+        }
+    };
+
+    function skip(seconds) {
+        player.currentTime += seconds;
+    }
+
+    document.addEventListener('keydown', onKeyDown, true)
+
+    player.addEventListener('click', onClick, true);
+    
+    [].forEach.call(btns, function(btn) {
+            btn.addEventListener('click', onBtnClick, true);
+    });
+    
+}());
+</script>
+</body>
+</html>
